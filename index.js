@@ -1,10 +1,12 @@
 import express from 'express';
+import router from './src/routes/pokemon.route.js';
 
 // Créer une application express
 const app = express();
 
 // Importer les middlewares
 app.use(express.json());
+app.use('/api/pokemon', router);
 
 
 

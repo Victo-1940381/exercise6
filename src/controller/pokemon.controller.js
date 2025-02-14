@@ -1,5 +1,5 @@
 import { parse } from "dotenv";
-import pokemonModel from "../modèle/pokemon.model";
+import pokemonModel from "../modèle/pokemon.model.js";
 
 const trouverpokemon = async (req,res) => {
     if(!req.params.id || parseInt(req.params.id)<= 0){
