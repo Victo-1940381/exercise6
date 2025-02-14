@@ -143,6 +143,34 @@ const getlistpokemonpageandtype = (page,type) => {
 
 
 }
+const getlistpokemon = (page) => {
+    
+    return new Promise((resolve, reject)=>{
+        if(page ==1){
+            const requete = `SELECT * FROM pokemon LIMIT 25 `;
+            db.query(requete,(erreur,resultat) =>{
+                if(erreur){
+                    console.log(`Erreur sqlState ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                    reject(erreur);
+                }
+                resolve(resultat);
+            }); 
+        }
+        else{
+           let val = (page*25)-25;
+        const requete = `SELECT * FROM pokemon LIMIT 25 OFFSET ?`;
+        const params = [val];
+        db.query(requete,params,(erreur,resultat)=>{
+            if(erreur){
+                console.log(`Erreur sqlState ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                reject(erreur);
+            }
+            resolve(resultat);
+        });
+        }
+        
+    });
+}
 
 export default {
     getpokemonbyid,getlistpokemonpageandtype
