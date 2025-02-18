@@ -80,6 +80,7 @@ const getlistpokemonpageandtype = (urlparams) => {
             db.query(requete,params,(erreur,resultat)=>{
                 if(erreur){
                     console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+
                     reject(erreur);
                 }
                 resolve(resultat);

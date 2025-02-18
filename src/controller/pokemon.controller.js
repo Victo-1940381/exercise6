@@ -26,7 +26,14 @@ const trouverpokemonlist = async(req,res) => {
      const urlparams = url.parse(req.url, true).query; 
     await pokemonModel.getlistpokemonpageandtype(urlparams)
     .then((pokemon)=>{
-       res.send(pokemon);
+        if(!pokemon[0]){
+            let message = "wesh";
+            res.send(JSON.parse(message));
+        }
+        else{
+            res.send(pokemon);
+        }
+       
     })
 };
 
