@@ -13,9 +13,9 @@ const getpokemonbyid = (id) => {
         });
     });
 };
-const getlistpokemonpageandtype = () => {
+const getlistpokemonpageandtype = (urlparams) => {
     return new Promise((resolve, reject)=>{
-      const urlparams = url.parse(req.url, true).query; 
+      //const urlparams = url.parse(req.url, true).query; 
     
       if(urlparams["page"]){
         if(urlparams["type"]){

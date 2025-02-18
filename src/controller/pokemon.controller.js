@@ -1,6 +1,6 @@
 import { parse } from "dotenv";
 import pokemonModel from "../modèle/pokemon.model.js";
-
+import	url from 'url';
 const trouverpokemon = async (req,res) => {
     if(!req.params.id || parseInt(req.params.id)<= 0){
         res.status(400);
@@ -23,11 +23,10 @@ const trouverpokemon = async (req,res) => {
     });
 };
 const trouverpokemonlist = async(req,res) => {
-    await pokemonModel.getlistpokemonpageandtype()
+     const urlparams = url.parse(req.url, true).query; 
+    await pokemonModel.getlistpokemonpageandtype(urlparams)
     .then((pokemon)=>{
-        for(let i =0;i<pokemon.lenght;i++){
-            res.send(pokemon[i]);
-        }
+       res.send(pokemon);
     })
 };
 
