@@ -1,4 +1,4 @@
-import { parse } from "dotenv";
+
 import pokemonModel from "../modèle/pokemon.model.js";
 import	url from 'url';
 const trouverpokemon = async (req,res) => {
@@ -23,18 +23,41 @@ const trouverpokemon = async (req,res) => {
     });
 };
 const trouverpokemonlist = async(req,res) => {
-     const urlparams = url.parse(req.url, true).query; 
+     const urlparams = url.parse(req.url, true).query;
+     let stat;
+    await pokemonModel.getnombrepokemonlist(urlparams)
+    .then((nbpokemon)=>{
+        if(urlparams["type"]){
+        stat = {
+            "type" : urlparams["type"],
+            "nombrepokemontotal":nbpokemon.length,
+            "page" : urlparams["page"],
+            "totalpage" : Math.trunc( nbpokemon.length / 25)};
+           // res.send(stat);
+        }
+        else{
+            stat = {
+                "type" : " ",
+                "nombrepokemontotal":nbpokemon.length,
+                "page" : urlparams["page"],
+                "totalpage" : Math.trunc( nbpokemon.length / 25)};
+        }
+        });
+
     await pokemonModel.getlistpokemonpageandtype(urlparams)
     .then((pokemon)=>{
         if(!pokemon[0]){
-            let message = "wesh";
-            res.send(JSON.parse(message));
+            
         }
         else{
-            res.send(pokemon);
+            let rep = {"pokemon": pokemon,
+                "stat": stat
+            };
+            res.send(rep);
         }
-       
-    })
+        
+    });
+    
 };
 
 export{
