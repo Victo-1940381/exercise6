@@ -47,7 +47,15 @@ const trouverpokemonlist = async(req,res) => {
     await pokemonModel.getlistpokemonpageandtype(urlparams)
     .then((pokemon)=>{
         if(!pokemon[0]){
-            
+            stat = {
+                "type" : " ",
+                "nombrepokemontotal":0,
+                "page" : 1,
+                "totalpage" :1};
+                let rep = {"pokemon": pokemon,
+                    "stat": stat
+                };
+                res.send(rep);   
         }
         else{
             let rep = {"pokemon": pokemon,
