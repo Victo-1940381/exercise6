@@ -20,7 +20,31 @@ const getlistpokemonpageandtype = (urlparams) => {
     
       if(urlparams["page"]){
         if(urlparams["type"]){
-
+            if(urlparams["page"] == 1){
+                const requete = `SELECT * FROM pokemon WHERE type_primaire = ? limit 25`;
+                const params = [urlparams["type"]];
+            db.query(requete,params,(erreur,resultat)=>{
+                if(erreur){
+                    console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                    reject(erreur);
+                }
+                resolve(resultat);
+            });
+            }
+            else{
+                let offset = (urlparams["page"] * 25)-25;
+                let textoffset = offset.toString();
+                let requetedebut = `SELECT * FROM pokemon WHERE type_primaire = ? limit 25 OFFSET `;
+                let requete = requetedebut.slice(0) + textoffset;
+                const params = [urlparams["type"]];
+            db.query(requete,params,(erreur,resultat)=>{
+                if(erreur){
+                    console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                    reject(erreur);
+                }
+                resolve(resultat);
+            });
+            }
         }
         else{
             if (urlparams["page"] == 1){
@@ -51,7 +75,15 @@ const getlistpokemonpageandtype = (urlparams) => {
       }
       else{
         if(urlparams["type"]){
-
+            const requete = `SELECT * FROM pokemon WHERE type_primaire = ? limit 25`;
+            const params = [urlparams["type"]];
+            db.query(requete,params,(erreur,resultat)=>{
+                if(erreur){
+                    console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                    reject(erreur);
+                }
+                resolve(resultat);
+            });
         }
         else{
             const requete = `SELECT * FROM pokemon limit 25`;
