@@ -1,3 +1,4 @@
+
 import db from '../config/db.js';
 import url from 'url';
 const getpokemonbyid = (id) => {
@@ -22,7 +23,30 @@ const getlistpokemonpageandtype = (urlparams) => {
 
         }
         else{
-
+            if (urlparams["page"] == 1){
+                const requete = `SELECT * FROM pokemon limit 25`;
+            db.query(requete,(erreur,resultat)=>{
+                if(erreur){
+                    console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                    reject(erreur);
+                }
+                resolve(resultat);
+            });
+            }
+            else{
+                let offset = (urlparams["page"] * 25)-25;
+                let textoffset = offset.toString();
+                let requetedebut = `SELECT * FROM pokemon limit 25 OFFSET `;
+                let requete = requetedebut.slice(0) + textoffset;
+              
+            db.query(requete,(erreur,resultat)=>{
+                if(erreur){
+                    console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                    reject(erreur);
+                }
+                resolve(resultat);
+            });
+            }
         }
       }
       else{
