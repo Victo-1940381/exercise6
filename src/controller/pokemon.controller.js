@@ -23,13 +23,14 @@ const trouverpokemon = async (req,res) => {
     });
 };
 const trouverpokemonlist = async(req,res) => {
-    if(!req.params.page){
-        if(!req.params.type){
-            
+    await pokemonModel.getlistpokemonpageandtype()
+    .then((pokemon)=>{
+        for(let i =0;i<pokemon.lenght;i++){
+            res.send(pokemon[i]);
         }
-    }
+    })
 };
 
 export{
-    trouverpokemon
+    trouverpokemon,trouverpokemonlist
 }

@@ -1,4 +1,5 @@
 import db from '../config/db.js';
+import url from 'url';
 const getpokemonbyid = (id) => {
     return new Promise((resolve, reject)=>{
         const requete = `SELECT * FROM pokemon WHERE id= ?`;
@@ -12,40 +13,42 @@ const getpokemonbyid = (id) => {
         });
     });
 };
-const getlistpokemonpageandtype = (page,type) => {
+const getlistpokemonpageandtype = () => {
     return new Promise((resolve, reject)=>{
-        if(page ==1){
-            const requete = `SELECT * FROM pokemon WHERE type_primaire = ? LIMIT 25 `;
-            const params =[type]
-            db.query(requete,params,(erreur,resultat) =>{
+      const urlparams = url.parse(req.url, true).query; 
+    
+      if(urlparams["page"]){
+        if(urlparams["type"]){
+
+        }
+        else{
+
+        }
+      }
+      else{
+        if(urlparams["type"]){
+
+        }
+        else{
+            const requete = `SELECT * FROM pokemon limit 25`;
+            db.query(requete,(erreur,resultat)=>{
                 if(erreur){
-                    console.log(`Erreur sqlState ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                    console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                     reject(erreur);
                 }
                 resolve(resultat);
-            }); 
+            });
         }
-        else{
-           let val = (page*25)-25;
-        const requete = `SELECT * FROM pokemon WHERE type_primaire = ? LIMIT 25 OFFSET ?`;
-        const params = [type,val];
-        db.query(requete,params,(erreur,resultat)=>{
-            if(erreur){
-                console.log(`Erreur sqlState ${erreur.sqlState} : ${erreur.sqlMessage}`);
-                reject(erreur);
-            }
-            resolve(resultat);
-        });
-        }
-        
+      }
     });
 
 }
+/*
 const getlistpokemon = (page) => {
     
     return new Promise((resolve, reject)=>{
         if(page ==1){
-            const requete = `SELECT * FROM pokemon LIMIT 25 `;
+            const requete = `SELECT * FROM pokemon LIMIT 25 `; // test sans limite
             db.query(requete,(erreur,resultat) =>{
                 if(erreur){
                     console.log(`Erreur sqlState ${erreur.sqlState} : ${erreur.sqlMessage}`);
@@ -68,8 +71,8 @@ const getlistpokemon = (page) => {
         }
         
     });
-}
+}*/
 
 export default {
-    getpokemonbyid,getlistpokemonpageandtype,getlistpokemon
+    getpokemonbyid,getlistpokemonpageandtype
 }
