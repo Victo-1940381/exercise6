@@ -97,7 +97,8 @@ const ajoutpokemon = async(req,res) => {
             "champs_manquant":champs_manquant
         } 
         res.status(400);
-        return erreur;
+        res.send(erreur);
+        return;
    }
    else{
     await pokemonModel.ajouterpokemon(req.body.nom,req.body.type_primaire,req.body.type_secondaire,req.body.pv,req.body.attaque,req.body.defense)
