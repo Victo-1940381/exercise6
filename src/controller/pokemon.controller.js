@@ -67,7 +67,59 @@ const trouverpokemonlist = async(req,res) => {
     });
     
 };
+const ajoutpokemon = async(req,res) => {
+    let erreur = false;
+    let champs_manquant = [];
+   if(!req.body.nom || !req.body.type_primaire || !req.body.type_secondaire || !req.body.pv || !req.body.attaque || !req.body.defense){
+    erreur = true;
+   }
 
+   if(erreur){
+        if(!req.body.nom){
+            champs_manquant.push("nom");
+        }
+        if(!req.body.type_primaire){
+            champs_manquant.push("type_primaire");
+        }
+        if(!req.body.type_secondaire){
+            champs_manquant.push("type_secondaire");
+        }
+        if(!req.body.pv){
+            champs_manquant.push("pv");
+        }
+        if(!req.body.attaque){
+            champs_manquant.push("attaque");
+        }
+        if(!req.body.defense){
+            champs_manquant.push("defense");
+        }   
+        let erreur = {"erreur":"le format des donnée est invalide",
+            "champs_manquant":champs_manquant
+        } 
+        res.status(400);
+        return erreur;
+   }
+   else{
+    await pokemonModel.ajouterpokemon(req.body.nom,req.body.type_primaire,req.body.type_secondaire,req.body.pv,req.body.attaque,req.body.defense)
+    .then((pokemon)=>{
+        let pokemoninfo = {"id":pokemon.insertId,
+                        "nom":req.body.nom,
+                        "type_primaire":req.body.type_primaire,
+                        "type_secondaire":req.body.type_secondaire,
+                        "pv":req.body.pv,
+                        "attaque":req.body.attaque,
+                        "defense":req.body.defense
+        };
+        let rep = {"message":`le pokemon [${req.body.nom}] a été ajouter avec succes`,
+                    "pokemon":pokemoninfo};
+                res.send(rep);    
+    })
+    .catch((erreur)=>{
+        res.status(500);
+        res.send({"erreur":`echec lors de la creation du pokemon [${req.body.nom}]`});
+    });
+   }
+};
 export{
-    trouverpokemon,trouverpokemonlist
+    trouverpokemon,trouverpokemonlist,ajoutpokemon
 }

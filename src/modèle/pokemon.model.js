@@ -185,7 +185,19 @@ const getnombrepokemonlist = (urlparams) => {
         }
       });
 }
-
-export default {
-    getpokemonbyid,getlistpokemonpageandtype,getnombrepokemonlist
+const ajouterpokemon = (nom,typepri,typesec,pv,attaque,defence) =>  {
+    return new Promise((resolve, reject) =>{
+        const requete = `INSERT INTO pokemon (nom,type_primaire,type_secondaire,pv,attaque,defense) VALUES (?,?,?,?,?,?) `;
+        const params = [nom,typepri,typesec,pv,attaque,defence];
+        db.query(requete,params,(erreur,resultat)=>{
+            if(erreur){
+                console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                reject(erreur);
+            }
+            resolve(resultat);
+        });
+    });
+}
+    export default {
+    getpokemonbyid,getlistpokemonpageandtype,getnombrepokemonlist,ajouterpokemon
 }
