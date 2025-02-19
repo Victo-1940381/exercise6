@@ -198,6 +198,19 @@ const ajouterpokemon = (nom,typepri,typesec,pv,attaque,defence) =>  {
         });
     });
 }
+const modifpokemon= (id,nom,typepri,typesec,pv,attaque,defence) => {
+    return new Promise((resolve, reject) =>{
+        const requete = `UPDATE pokemon SET  nom = ?, type_primaire = ? , type_secondaire = ? , pv = ?, attaque = ?, defense = ? WHERE id = ?`;
+        const params = [nom,typepri,typesec,pv,attaque,defence,id];
+        db.query(requete,params,(erreur,resultat)=>{
+            if(erreur){
+                console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                reject(erreur);
+            }
+            resolve(resultat);
+        });
+    });
+}
     export default {
-    getpokemonbyid,getlistpokemonpageandtype,getnombrepokemonlist,ajouterpokemon
+    getpokemonbyid,getlistpokemonpageandtype,getnombrepokemonlist,ajouterpokemon,modifpokemon
 }
