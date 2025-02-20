@@ -160,10 +160,10 @@ const modif = async(req,res) => {
         return;
    }
    else{
-    await pokemonModel.modifpokemon(req.body.nom,req.body.type_primaire,req.body.type_secondaire,req.body.pv,req.body.attaque,req.body.defense,req.query.id)
+    await pokemonModel.modifpokemon(req.params.id,req.body.nom,req.body.type_primaire,req.body.type_secondaire,req.body.pv,req.body.attaque,req.body.defense)
     .then((pokemon)=>{
         if(!pokemon[0]){
-            res.send({"erreur":`le pokemon id [${rep.query.id}] n'existe pas dans la base de données`});
+            res.send({"erreur":`le pokemon id [${rep.params.id}] n'existe pas dans la base de données`});
             return;
         }
         let pokemoninfo = {"id":pokemon.insertId,
@@ -180,10 +180,10 @@ const modif = async(req,res) => {
     })
     .catch((erreur)=>{
         res.status(500);
-        res.send({"erreur":`echec lors de la modification du pokemon [${req.query.id}]`});
+        res.send({"erreur":`echec lors de la modification du pokemon [${req.params.id}]`});
     });
    }
 }
 export{
-    trouverpokemon,trouverpokemonlist,ajoutpokemon
+    trouverpokemon,trouverpokemonlist,ajoutpokemon,modif
 }
