@@ -5,6 +5,6 @@ const router = express.Router();
 router.get('/liste', trouverpokemonlist);
 router.get('/:id', trouverpokemon);
 router.post('/', ajoutpokemon);
-router.put('/:id',modif)
+router.put('/:id', modif);
 
 export default router;
