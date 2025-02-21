@@ -1,0 +1,35 @@
+{
+    "openapi" : "3.1.0",
+    "info" : {    "title": "pokemon api",
+    "summary": "un api pour les pokémon",
+    "description": "on peut faire plusieur requete pour afficher les pokémon de la base de donnée",
+    "contact": {
+        "name": "API Support",
+        "url": "https://www.example.com/support",
+        "email": "support@example.com"
+    },
+    "version": "3.1.0" },
+    "servers" : [  {
+        "url": "http://localhost:3000/",
+        "description": "Serveur de développement"
+    },
+    {
+        "url": "http://api.profs.ca",
+        "description": "Serveur en ligne"
+    } ],
+    "paths" : {
+        "route1" : {  "/api/salutations/liste" : {
+            "get": {
+                "description": "Retourne la liste de toutes les salutations",
+                "summary": "Liste des salutations",
+                "tags": [ "Salutions" ],
+               
+                "responses": {
+                    
+                }
+            }
+             }
+        
+    }
+}
+}
