@@ -160,13 +160,13 @@ const modif = async(req,res) => {
         return;
    }
    else{
-    await pokemonModel.modifpokemon(req.params.id,req.body.nom,req.body.type_primaire,req.body.type_secondaire,req.body.pv,req.body.attaque,req.body.defense)
+    await pokemonModel.modifpokemon(parseInt(req.params['id']),req.body.nom,req.body.type_primaire,req.body.type_secondaire,req.body.pv,req.body.attaque,req.body.defense)
     .then((pokemon)=>{
         if(!pokemon[0]){
             res.send({"erreur":`le pokemon id [${rep.params.id}] n'existe pas dans la base de données`});
             return;
         }
-        let pokemoninfo = {"id":pokemon.insertId,
+        let pokemoninfo = {"id":req.params.id,
                         "nom":req.body.nom,
                         "type_primaire":req.body.type_primaire,
                         "type_secondaire":req.body.type_secondaire,
@@ -174,7 +174,7 @@ const modif = async(req,res) => {
                         "attaque":req.body.attaque,
                         "defense":req.body.defense
         };
-        let rep = {"message":`le pokemon [${pokemon.insertId}] a été modifier avec succes`,
+        let rep = {"message":`le pokemon [${pokemon.params.id}] a été modifier avec succes`,
                     "pokemon":pokemoninfo};
                 res.send(rep);    
     })
