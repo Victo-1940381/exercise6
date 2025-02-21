@@ -122,18 +122,19 @@ const ajoutpokemon = async(req,res) => {
    }
 };
 const modif = async(req,res) => {
-    let erreur = false;
+    let erreurmoins = false;
+    let trouver = false;
     let champs_manquant = [];
    if(!req.body.nom || !req.body.type_primaire || !req.body.type_secondaire || !req.body.pv || !req.body.attaque || !req.body.defense){
     erreur = true;
    }
-   if(!req.params.id || parseInt(req.params.id)<= 0){
+   if(!req.params["id"] || parseInt(req.params["id"])<= 0){
     res.status(400);
     res.send({erreur: `l'id doit etre superieur a zero`});
     return;
 }
 
-   if(erreur){
+   if(erreurmoins){
         if(!req.body.nom){
             champs_manquant.push("nom");
         }
@@ -160,13 +161,26 @@ const modif = async(req,res) => {
         return;
    }
    else{
+    
+    await pokemonModel.getpokemonbyid(parseInt(req.params['id']))
+    .then((poke)=>{
+        if(!poke[0]){
+           trouver = false; 
+        }
+        else{
+            trouver = true;
+        }
+    })
+    .catch((error)=>{
+        
+    });
     await pokemonModel.modifpokemon(parseInt(req.params['id']),req.body.nom,req.body.type_primaire,req.body.type_secondaire,req.body.pv,req.body.attaque,req.body.defense)
     .then((pokemon)=>{
-        if(!pokemon[0]){
-            res.send({"erreur":`le pokemon id [${rep.params.id}] n'existe pas dans la base de données`});
+        if(!trouver){
+            res.send({"erreur":`le pokemon id [${req.params["id"]}] n'existe pas dans la base de données`});
             return;
         }
-        let pokemoninfo = {"id":req.params.id,
+        let pokemoninfo = {"id":req.params["id"],
                         "nom":req.body.nom,
                         "type_primaire":req.body.type_primaire,
                         "type_secondaire":req.body.type_secondaire,
@@ -174,13 +188,13 @@ const modif = async(req,res) => {
                         "attaque":req.body.attaque,
                         "defense":req.body.defense
         };
-        let rep = {"message":`le pokemon [${pokemon.params.id}] a été modifier avec succes`,
+        let rep = {"message":`le pokemon [${req.params["id"]}] a été modifier avec succes`,
                     "pokemon":pokemoninfo};
                 res.send(rep);    
     })
     .catch((erreur)=>{
         res.status(500);
-        res.send({"erreur":`echec lors de la modification du pokemon [${req.params.id}]`});
+        res.send({"erreur":`echec lors de la modification du pokemon [${req.params["id"]}]`});
     });
    }
 }

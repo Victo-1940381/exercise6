@@ -2,6 +2,7 @@
 import { console } from 'inspector';
 import db from '../config/db.js';
 import url from 'url';
+import { resolve } from 'path';
 const getpokemonbyid = (id) => {
     return new Promise((resolve, reject)=>{
         const requete = `SELECT * FROM pokemon WHERE id= ?`;
@@ -201,12 +202,23 @@ const ajouterpokemon = (nom,typepri,typesec,pv,attaque,defence) =>  {
 }
 const modifpokemon= (id,nom,typepri,typesec,pv,attaque,defence) => {
     return new Promise((resolve, reject) =>{
-        
         const requete = `UPDATE pokemon SET  nom = ?, type_primaire = ? , type_secondaire = ? , pv = ?, attaque = ?, defense = ? WHERE id = ?`;
         const params = [nom,typepri,typesec,pv,attaque,defence,id];
         db.query(requete,params,(erreur,resultat)=>{
             if(erreur){
-                console.log("test1234");
+                //console.log("test1234");
+                console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
+                reject(erreur);
+            }
+            resolve(resultat);
+        });
+    });
+}
+const nbpokemon = () =>{
+    return new Promise((resolve, reject)=>{
+        const requete = `SELECT count(id) from pokemon`;
+        db.query(requete,(erreur,resultat)=>{
+            if(erreur){
                 console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                 reject(erreur);
             }
@@ -215,5 +227,5 @@ const modifpokemon= (id,nom,typepri,typesec,pv,attaque,defence) => {
     });
 }
     export default {
-    getpokemonbyid,getlistpokemonpageandtype,getnombrepokemonlist,ajouterpokemon,modifpokemon
+    getpokemonbyid,getlistpokemonpageandtype,getnombrepokemonlist,ajouterpokemon,modifpokemon,nbpokemon
 }
