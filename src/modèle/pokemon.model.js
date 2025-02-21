@@ -214,10 +214,11 @@ const modifpokemon= (id,nom,typepri,typesec,pv,attaque,defence) => {
         });
     });
 }
-const nbpokemon = () =>{
+const supprimer = (id) =>{
     return new Promise((resolve, reject)=>{
-        const requete = `SELECT count(id) from pokemon`;
-        db.query(requete,(erreur,resultat)=>{
+        const requete = `DELETE FROM pokemon WHERE id = ?`;
+        const params = [id];
+        db.query(requete,params,(erreur,resultat)=>{
             if(erreur){
                 console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                 reject(erreur);
@@ -227,5 +228,5 @@ const nbpokemon = () =>{
     });
 }
     export default {
-    getpokemonbyid,getlistpokemonpageandtype,getnombrepokemonlist,ajouterpokemon,modifpokemon,nbpokemon
+    getpokemonbyid,getlistpokemonpageandtype,getnombrepokemonlist,ajouterpokemon,modifpokemon,supprimer
 }

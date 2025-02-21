@@ -1,4 +1,5 @@
 
+import { error } from "console";
 import pokemonModel from "../modèle/pokemon.model.js";
 import	url from 'url';
 const trouverpokemon = async (req,res) => {
@@ -169,6 +170,7 @@ const modif = async(req,res) => {
         }
         else{
             trouver = true;
+
         }
     })
     .catch((error)=>{
@@ -198,6 +200,37 @@ const modif = async(req,res) => {
     });
    }
 }
+const suppr = async(req,res) =>{
+    let trouver = false;
+    let pokemoninfo
+    await pokemonModel.getpokemonbyid(parseInt(req.params['id']))
+    .then((poke)=>{
+        if(!poke[0]){
+           trouver = false; 
+        }
+        else{
+            trouver = true;
+            pokemoninfo = poke[0];
+        }
+    })
+    .catch((error)=>{
+
+    });
+    await pokemonModel.supprimer(parseInt(req.params['id']))
+    .then((pokmeon)=>{
+        if(!trouver){
+            res.send({"erreur":`le pokemon id [${req.params["id"]}] n'existe pas dans la base de données`});
+            return;
+        }
+        let rep = {"message":`le pokemon [${req.params["id"]}] a été supprimer avec succes`,
+                    "pokemon":pokemoninfo};
+                res.send(rep);
+    })
+    .catch((erreur)=>{
+        res.status(500);
+        res.send({"erreur":`echec lors de la suppression du pokemon [${pokemoninfo.nom}]`});
+    });
+}
 export{
-    trouverpokemon,trouverpokemonlist,ajoutpokemon,modif
+    trouverpokemon,trouverpokemonlist,ajoutpokemon,modif,suppr
 }
