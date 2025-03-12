@@ -1,18 +1,18 @@
 
 import { console } from 'inspector';
-import db from '../config/db.js';
+import db from '../config/db_pg.js';
 import url from 'url';
 import { resolve } from 'path';
 const getpokemonbyid = (id) => {
     return new Promise((resolve, reject)=>{
-        const requete = `SELECT * FROM pokemon WHERE id= ?`;
+        const requete = `SELECT * FROM pokemon WHERE id= $1`;
         const params = [id]
         db.query(requete,params, (erreur,resultat) => {
             if(erreur) {
                 console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         });
     });
 };
@@ -23,20 +23,20 @@ const getlistpokemonpageandtype = (urlparams) => {
       if(urlparams["page"]){
         if(urlparams["type"]){
             if(urlparams["page"] == 1){
-                const requete = `SELECT * FROM pokemon WHERE type_primaire = ? limit 25`;
+                const requete = `SELECT * FROM pokemon WHERE type_primaire = $1 limit 25`;
                 const params = [urlparams["type"]];
             db.query(requete,params,(erreur,resultat)=>{
                 if(erreur){
                     console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                     reject(erreur);
                 }
-                resolve(resultat);
+                resolve(resultat.rows);
             });
             }
             else{
                 let offset = (urlparams["page"] * 25)-25;
                 let textoffset = offset.toString();
-                let requetedebut = `SELECT * FROM pokemon WHERE type_primaire = ? limit 25 OFFSET `;
+                let requetedebut = `SELECT * FROM pokemon WHERE type_primaire = $1 limit 25 OFFSET `;
                 let requete = requetedebut.slice(0) + textoffset;
                 const params = [urlparams["type"]];
             db.query(requete,params,(erreur,resultat)=>{
@@ -44,7 +44,7 @@ const getlistpokemonpageandtype = (urlparams) => {
                     console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                     reject(erreur);
                 }
-                resolve(resultat);
+                resolve(resultat.rows);
             });
             }
         }
@@ -56,7 +56,7 @@ const getlistpokemonpageandtype = (urlparams) => {
                     console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                     reject(erreur);
                 }
-                resolve(resultat);
+                resolve(resultat.rows);
             });
             }
             else{
@@ -70,14 +70,14 @@ const getlistpokemonpageandtype = (urlparams) => {
                     console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                     reject(erreur);
                 }
-                resolve(resultat);
+                resolve(resultat.rows);
             });
             }
         }
       }
       else{
         if(urlparams["type"]){
-            const requete = `SELECT * FROM pokemon WHERE type_primaire = ? limit 25`;
+            const requete = `SELECT * FROM pokemon WHERE type_primaire = $1 limit 25`;
             const params = [urlparams["type"]];
             db.query(requete,params,(erreur,resultat)=>{
                 if(erreur){
@@ -85,7 +85,7 @@ const getlistpokemonpageandtype = (urlparams) => {
 
                     reject(erreur);
                 }
-                resolve(resultat);
+                resolve(resultat.rows);
             });
         }
         else{
@@ -95,7 +95,7 @@ const getlistpokemonpageandtype = (urlparams) => {
                     console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                     reject(erreur);
                 }
-                resolve(resultat);
+                resolve(resultat.rows);
             });
         }
       }
@@ -109,20 +109,20 @@ const getnombrepokemonlist = (urlparams) => {
         if(urlparams["page"]){
           if(urlparams["type"]){
               if(urlparams["page"] == 1){
-                  const requete = `SELECT * FROM pokemon WHERE type_primaire = ? `;
+                  const requete = `SELECT * FROM pokemon WHERE type_primaire = $1 `;
                   const params = [urlparams["type"]];
               db.query(requete,params,(erreur,resultat)=>{
                   if(erreur){
                       console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                       reject(erreur);
                   }
-                  resolve(resultat);
+                  resolve(resultat.rows);
               });
               }
               else{
                   let offset = (urlparams["page"] * 25)-25;
                   let textoffset = offset.toString();
-                  let requetedebut = `SELECT * FROM pokemon WHERE type_primaire = ? `;
+                  let requetedebut = `SELECT * FROM pokemon WHERE type_primaire = $1 `;
                  // let requete = requetedebut.slice(0) + textoffset;
                   const params = [urlparams["type"]];
               db.query(requetedebut,params,(erreur,resultat)=>{
@@ -130,7 +130,7 @@ const getnombrepokemonlist = (urlparams) => {
                       console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                       reject(erreur);
                   }
-                  resolve(resultat);
+                  resolve(resultat.rows);
               });
               }
           }
@@ -142,7 +142,7 @@ const getnombrepokemonlist = (urlparams) => {
                       console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                       reject(erreur);
                   }
-                  resolve(resultat);
+                  resolve(resultat.rows);
               });
               }
               else{
@@ -156,14 +156,14 @@ const getnombrepokemonlist = (urlparams) => {
                       console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                       reject(erreur);
                   }
-                  resolve(resultat);
+                  resolve(resultat.rows);
               });
               }
           }
         }
         else{
           if(urlparams["type"]){
-              const requete = `SELECT * FROM pokemon WHERE type_primaire = ? `;
+              const requete = `SELECT * FROM pokemon WHERE type_primaire = $1 `;
               const params = [urlparams["type"]];
               db.query(requete,params,(erreur,resultat)=>{
                   if(erreur){
@@ -171,7 +171,7 @@ const getnombrepokemonlist = (urlparams) => {
   
                       reject(erreur);
                   }
-                  resolve(resultat);
+                  resolve(resultat.rows);
               });
           }
           else{
@@ -181,7 +181,7 @@ const getnombrepokemonlist = (urlparams) => {
                       console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                       reject(erreur);
                   }
-                  resolve(resultat);
+                  resolve(resultat.rows);
               });
           }
         }
@@ -189,20 +189,20 @@ const getnombrepokemonlist = (urlparams) => {
 }
 const ajouterpokemon = (nom,typepri,typesec,pv,attaque,defence) =>  {
     return new Promise((resolve, reject) =>{
-        const requete = `INSERT INTO pokemon (nom,type_primaire,type_secondaire,pv,attaque,defense) VALUES (?,?,?,?,?,?) `;
+        const requete = `INSERT INTO pokemon (nom,type_primaire,type_secondaire,pv,attaque,defense) VALUES ($1,$2,$3,$4,$5,$6) `;
         const params2 = [nom,typepri,typesec,pv,attaque,defence];
         db.query(requete,params2,(erreur,resultat)=>{
             if(erreur){
                 console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         });
     });
 }
 const modifpokemon= (id,nom,typepri,typesec,pv,attaque,defence) => {
     return new Promise((resolve, reject) =>{
-        const requete = `UPDATE pokemon SET  nom = ?, type_primaire = ? , type_secondaire = ? , pv = ?, attaque = ?, defense = ? WHERE id = ?`;
+        const requete = `UPDATE pokemon SET  nom = $1, type_primaire = $2 , type_secondaire = $3 , pv = $4, attaque = $5, defense = $6 WHERE id = $7`;
         const params = [nom,typepri,typesec,pv,attaque,defence,id];
         db.query(requete,params,(erreur,resultat)=>{
             if(erreur){
@@ -210,20 +210,20 @@ const modifpokemon= (id,nom,typepri,typesec,pv,attaque,defence) => {
                 console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         });
     });
 }
 const supprimer = (id) =>{
     return new Promise((resolve, reject)=>{
-        const requete = `DELETE FROM pokemon WHERE id = ?`;
+        const requete = `DELETE FROM pokemon WHERE id = $1`;
         const params = [id];
         db.query(requete,params,(erreur,resultat)=>{
             if(erreur){
                 console.log(`Erreur sqlstate ${erreur.sqlState} : ${erreur.sqlMessage}`);
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         });
     });
 }
