@@ -4,7 +4,7 @@
     "summary": "un api pour les pokémon",
     "description": "on peut faire plusieur requete pour afficher les pokémon de la base de donnée",
     "contact": {
-        "name": "API Support",
+        "name": "support api",
         "url": "https://www.example.com/support",
         "email": "support@example.com"
     },
@@ -12,23 +12,201 @@
     "servers" : [  {
         "url": "http://localhost:3000/",
         "description": "Serveur de développement"
-    },
-    {
-        "url": "http://api.profs.ca",
-        "description": "Serveur en ligne"
     } ],
     "paths" : {
-        "route1" : {  "/api/salutations/liste" : {
+        "/api/pokemon/{id}" : {
             "get": {
-                "description": "Retourne la liste de toutes les salutations",
-                "summary": "Liste des salutations",
-                "tags": [ "Salutions" ],
-               
+                "description": "retourne un pokémon en fonction de son id",
+                "summary": "afficher un pokémon",
+                "tags": [ "pokemon" ],
+                "parameters": [
+                    {
+                        "in" : "path",
+                        "name": "id",
+                         "description": "Id du pokémon",
+                         "required": true,
+                         "schema":{
+                            "type": "interger",
+                            "format": "int32",
+                            "exemple": "1"
+                         }  
+                    }
+                ],
                 "responses": {
-                    
+                    "400" : {
+                        "description": "id invalide",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties":{
+                                        "erreur": {
+                                            "type": "string",
+                                            "example": "l'id est invalide"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "pokémon introuvable",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties":{
+                                        "erreur": {
+                                            "type": "string",
+                                            "example": "pokémon introuvable"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500":{
+                        "description": "erreur recuperation du pokémon",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties":{
+                                        "message": {
+                                            "type": "string",
+                                            "example": "erreur recupération du pokémon"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200":{
+                        "description": "pokémon trouver avec success",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties":{
+                                       "id":{
+                                        "type": "integer",
+                                        "example": "12"
+                                       },
+                                       "nom":{
+                                        "type": "string",
+                                        "example": "luna"
+                                       },
+                                       "type_primaire":{
+                                        "type": "string",
+                                        "example": "Fire"
+                                       },
+                                       "type_secondaire":{
+                                        "type": "string",
+                                        "example": "Flying"
+                                       },
+                                       "pv":{
+                                        "type": "interger",
+                                        "example": "50"
+                                       },
+                                       "attaque":{
+                                        "type": "interger",
+                                        "example": "100"
+                                       },
+                                       "defense":{
+                                        "type": "interger",
+                                        "example": "90"
+                                       }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+            },
+            "put":{
+                "description": "modifie un pokémon en fonction de son id",
+                "summary": "modifier un pokémon",
+                "tags": [ "pokemon" ],
+                "parameters": [
+                    {
+                        "in" : "path",
+                        "name": "id",
+                         "description": "Id du pokémon",
+                         "required": true,
+                         "schema":{
+                            "type": "interger",
+                            "format": "int32",
+                            "exemple": "1"
+                         }  
+                    } ],
+                    "requestBody":{
+                        "required":true,
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties":{
+                                        "nom":{
+                                            "type":"string",
+                                            "example":"luna"
+                                        },
+                                        "type_primaire":{
+                                            "type":"string",
+                                            "example":"Grass"
+                                        },
+                                        "type_secondaire":{
+                                            "type":"string",
+                                            "example":" "
+                                        },
+                                        "pv":{
+                                            "type":"integer",
+                                            "example":"200"
+                                        },
+                                        "attaque":{
+                                            "type":"integer",
+                                            "example":"150"
+                                        },
+                                        "defense":{
+                                            "type":"integer",
+                                            "example":"100"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses":{
+                        "400":{
+                            "description": "champs manquant",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type": "object",
+                                        "properties":{
+                                            "erreur": {
+                                                "type": "string",
+                                                "example": "format donnée invalide"
+                                            },
+                                            "champs_manquant":{
+                                                "type":"array",
+                                                "items":{
+                                                 "type": "string",
+                                                "example":"nom,pv"   
+                                                }
+                                                
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "404":{}
+                    }
+            },
+            "delete":{
+
             }
-             }
+             
         
     }
 }

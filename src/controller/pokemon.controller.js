@@ -15,6 +15,7 @@ const trouverpokemon = async (req,res) => {
             res.send({erreur: `pokemon introuvable avec l'id ${req.params.id}`});
             return;
         }
+        res.status(200);
         res.send(pokemon[0]);
     })
     .catch((erreur) => {
@@ -129,11 +130,11 @@ const modif = async(req,res) => {
    if(!req.body.nom || !req.body.type_primaire || !req.body.type_secondaire || !req.body.pv || !req.body.attaque || !req.body.defense){
     erreur = true;
    }
-   if(!req.params["id"] || parseInt(req.params["id"])<= 0){
+  /* if(!req.params["id"] || parseInt(req.params["id"])<= 0){
     res.status(400);
     res.send({erreur: `l'id doit etre superieur a zero`});
     return;
-}
+}*/
 
    if(erreurmoins){
         if(!req.body.nom){
@@ -179,6 +180,7 @@ const modif = async(req,res) => {
     await pokemonModel.modifpokemon(parseInt(req.params['id']),req.body.nom,req.body.type_primaire,req.body.type_secondaire,req.body.pv,req.body.attaque,req.body.defense)
     .then((pokemon)=>{
         if(!trouver){
+            res.status(404);
             res.send({"erreur":`le pokemon id [${req.params["id"]}] n'existe pas dans la base de données`});
             return;
         }
@@ -192,6 +194,7 @@ const modif = async(req,res) => {
         };
         let rep = {"message":`le pokemon [${req.params["id"]}] a été modifier avec succes`,
                     "pokemon":pokemoninfo};
+                res.status(200);
                 res.send(rep);    
     })
     .catch((erreur)=>{
