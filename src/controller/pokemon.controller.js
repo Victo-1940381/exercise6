@@ -21,7 +21,7 @@ const trouverpokemon = async (req,res) => {
     .catch((erreur) => {
         console.log('Erreur : ', erreur);
         res.status(500);
-        res.send({message: "erreur lors de la recuperation du pokémon acev l'id" + req.params.id});
+        res.send({message: "erreur lors de la recuperation du pokémon avec l'id " + req.params.id});
     });
 };
 const trouverpokemonlist = async(req,res) => {
