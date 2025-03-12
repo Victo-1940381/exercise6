@@ -1,4 +1,4 @@
-/*import mysql from "mysql2";
+import mysql from "mysql2";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -10,4 +10,4 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 });
 
-export default pool;*/
+export default pool;
